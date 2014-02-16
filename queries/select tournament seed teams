@@ -1,0 +1,4 @@
+﻿select ts.*, ss.team_id as strong, ws.team_id as weak 
+from tournament_slots as ts 
+left join tournament_seeds as ss on ts.strongseed = ss.seed and ts.season = ss.season
+left join tournament_seeds as ws on ts.weakseed = ws.seed and ts.season = ws.season;

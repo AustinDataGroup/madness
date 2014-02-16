@@ -1,0 +1,34 @@
+﻿--select * from teams where name = 'Virginia'; -- 830
+--select * from teams where name = 'Duke'; -- 577
+--select * from teams where name = 'Maryland'; -- 662
+
+--select * from teams where name = 'Virginia Tech'; -- 831
+
+select season, day_num, resulting_score from regular_season_matchups
+where team1_id = 577
+order by season, day_num;
+
+-- select t1.name as team1, sum(rsm.resulting_score) as total from regular_season_matchups as rsm
+-- left join teams as t1 on rsm.team1_id = t1.id
+-- group by t1.name
+-- order by sum(rsm.resulting_score) DESC;
+
+-- insert into regular_season_matchups 
+-- select t1.id as team1_id, 
+-- t2.id as team2_id, 
+-- rsr.difference as resulting_score,
+-- rsr.season as season,
+-- rsr.day_num as day_num
+-- from regular_season_results as rsr
+-- left join teams as t1 on rsr.winning_team_id = t1.id
+-- left join teams as t2 on rsr.losing_team_id = t2.id;
+-- 
+-- insert into regular_season_matchups 
+-- select t1.id as team1_id, 
+-- t2.id as team2_id, 
+-- (-1 * rsr.difference) as resulting_score,
+-- rsr.season as season,
+-- rsr.day_num as day_num
+-- from regular_season_results as rsr
+-- left join teams as t1 on rsr.losing_team_id = t1.id
+-- left join teams as t2 on rsr.winning_team_id = t2.id;

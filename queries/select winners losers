@@ -1,0 +1,12 @@
+﻿select 	rsr.season,
+	rsr.winning_team_score,
+	rsr.losing_team_score,
+	rsr.win_location,
+	(rsr.winning_team_score - rsr.losing_team_score) as difference,
+	wt.name as winner,
+	lt.name as loser
+from regular_season_results as rsr 
+left join teams as wt on rsr.winning_team_id = wt.id
+left join teams as lt on rsr.losing_team_id = lt.id
+where wt.name = 'Virginia' or lt.name = 'Virginia'
+order by (rsr.winning_team_score - rsr.losing_team_score) DESC;
