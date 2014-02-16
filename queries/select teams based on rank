@@ -1,0 +1,21 @@
+﻿select
+case when rsm.resulting_score > 0 then 1 else 0 end as team1_wins, 
+rsm.team1_id as team1, 
+rsm.team2_id as team2,
+rsm.day_num,
+-- get the season as an integer.
+(ascii(rsm.season) - ascii('A') + 1) as season,
+ts1.seed,
+ts2.seed,
+case when ts1.seed <> '' then (trim(ts1.seed, 'WXYZab')::int) else 17 end as t1_rank,
+case when ts2.seed <> '' then (trim(ts2.seed, 'WXYZab')::int) else 17 end as t2_rank
+from regular_season_matchups as rsm
+left join tournament_seeds as ts1 on ascii(ts1.season) = ascii(rsm.season)-1 and ts1.team_id = rsm.team1_id
+left join tournament_seeds as ts2 on ascii(ts2.season) = ascii(rsm.season)-1 and ts2.team_id = rsm.team2_id
+-- training data is everything except the last season so < ascii('R'). Last season is = ascii('R')
+where ascii(rsm.season) < ascii('R') and ascii(rsm.season) > ascii('A')
+order by rsm.season, rsm.day_num;
+
+
+--select (17 - trim('W01b', 'WXYZab')::int);
+--select case when null <> null then 1 else 0 end;
