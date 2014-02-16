@@ -36,7 +36,7 @@ Output = Forest.predict(test_data)
 print 'done!'
 
 print 'Writing predictions...',
-outfile = csv.writer(open('predictions.csv', 'wb'))
+outfile = csv.writer(open('predictions/results.csv', 'wb'))
 outfile.writerow(['ndx', 'team1_won'])
 for ndx, row in enumerate(Output):
     outfile.writerow([ndx+1, row])
