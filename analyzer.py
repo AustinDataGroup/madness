@@ -4,8 +4,11 @@ import numpy as np
 import csv
 from sklearn.ensemble import RandomForestClassifier
 
-csv_reader = csv.reader(open('data/regular_season_labeled_data.csv', 'rb'))
+csv_reader = csv.reader(open('data/training_data.csv', 'rb'))
 test_data_csv = csv.reader(open('data/testing_data.csv'))
+
+labeled_data_csv = csv.reader(open('predictions/labeled_data.csv', 'rb'))
+labeled_data_csv.next()
 
 test_data_csv.next()
 print csv_reader.next()
@@ -35,9 +38,27 @@ print 'Predicting test data...',
 Output = Forest.predict(test_data)
 print 'done!'
 
-print 'Writing predictions...',
-outfile = csv.writer(open('predictions/results.csv', 'wb'))
-outfile.writerow(['ndx', 'team1_won'])
+#print 'Writing predictions...',
+#outfile = csv.writer(open('predictions/results.csv', 'wb'))
+#outfile.writerow(['ndx', 'team1_won'])
+#for ndx, row in enumerate(Output):
+#    outfile.writerow([ndx+1, row])
+#print 'done!'
+
+labeled_data = []
+for row in labeled_data_csv:
+    labeled_data.append(row)
+
+labeled_data = np.array(labeled_data)
+
+wrong_count = 0
+right_count = 0
+
 for ndx, row in enumerate(Output):
-    outfile.writerow([ndx+1, row])
-print 'done!'
+    if row == labeled_data[ndx, 0]:
+        right_count += 1
+    else:
+        wrong_count += 1
+
+print "wrong_count is:", wrong_count
+print "right_count is:", right_count
