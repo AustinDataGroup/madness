@@ -1,5 +1,4 @@
-﻿-- update tournament_results set difference = (winning_team_score - losing_team_score);
-truncate tournament_slots_results;
+﻿truncate tournament_slots_results;
 insert into tournament_slots_results (season, slot, strongseed, weakseed, winning_team_id, losing_team_id) (select season, slot, strongseed, weakseed, null, null from tournament_slots);
 -- update tournament_slots_results set winning_team_id = null, losing_team_id = null;
 -- select * from tournament_slots_results where season = 'A';
@@ -36,8 +35,8 @@ left join tournament_seeds as sts on sts.seed = slots.strongseed and slots.seaso
 left join tournament_slots_results as qual_slot on qual_slot.slot = slots.weakseed and slots.season = qual_slot.season
 left join tournament_results as tr on 
 (
-tr.winning_team_id = sts.team_id
-and tr.losing_team_id = qual_slot.winning_team_id
+tr.losing_team_id = sts.team_id
+and tr.winning_team_id = qual_slot.winning_team_id
 and qual_slot.season = tr.season 
 and sts.season = tr.season
 ) 
@@ -80,9 +79,12 @@ END LOOP;
 END
 $do$
 
+-- select * from tournament_results where season = 'R' and winning_team_id = 637 or losing_team_id = 637;
+
 -- select * from teams where id = 640 or id = 786
 -- select * from seasons where season = 'A' or season = 'G'
--- select * from tournament_slots_results where season = 'G' order by slot;
+-- select * from tournament_slots_results where season = 'R' order by slot;
+-- select * from tournament_slots_results order by season, slot;
+-- select * from tournament_seeds where season = 'R' and seed = 'Z04';
 -- select * from teams where id = 662 or id = 625;
-
 -- select * from tournament_seeds where season = 'G'
