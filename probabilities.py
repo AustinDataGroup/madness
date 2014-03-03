@@ -29,6 +29,7 @@ class TeamEnum(Enum):
     id = 0
     name = 1
 
+##### CLASSES FOR TABLES
 class Seasons:
     @staticmethod
     def find_all_seasons(conn):
@@ -95,6 +96,8 @@ if __name__ == '__main__':
 
     teams = Teams.find_all_teams(conn)
 
+    all_slots = {}
+
     #iterate over all the teams to find out what their possible slots are for a given season.
     for team in teams:    
         team_id = team[TeamEnum.id] #cache the team's ID
@@ -106,7 +109,23 @@ if __name__ == '__main__':
             # find all the possible slots for this team.
             possible_slots = TournamentSlots.find_possible_slots_for_team(conn, team_id, season_letter)
 
+
             # if the team didn't make the tournament this season, this will be None
             if possible_slots:
-                print 'possible slots for team %d in season %s' % (team_id, season_letter)
-                print possible_slots
+                for num, slot in enumerate(possible_slots):
+                    season_slot = "%s_%s" % (season_letter.strip(), slot)
+                    season_slot = season_slot.strip()
+
+                    if season_slot in all_slots:
+                        all_slots[season_slot]['teams'].append(team_id)
+                    else:
+                        all_slots[season_slot] = {'distance': num, 'teams': [team_id]}
+    for slot in all_slots:
+        teams_dict = all_slots[slot]
+        distance = teams_dict['distance']
+        for team1 in teams_dict['teams']:
+            for team2 in teams_dict['teams']:
+                if team1 == team2:
+                    continue
+                probability = 100 / (distance + 1)
+                print 'probability of %d playing %d = %f' %(team1, team2, probability)
