@@ -117,15 +117,13 @@ if __name__ == '__main__':
                     season_slot = season_slot.strip()
 
                     if season_slot in all_slots:
-                        all_slots[season_slot]['teams'].append(team_id)
+                        all_slots[season_slot].append({'team_id': team_id, 'probability': (1.0/(num+1))})
                     else:
-                        all_slots[season_slot] = {'distance': num, 'teams': [team_id]}
+                        all_slots[season_slot] = [{'team_id': team_id, 'probability': (1.0/(num+1)) }]
     for slot in all_slots:
-        teams_dict = all_slots[slot]
-        distance = teams_dict['distance']
-        for team1 in teams_dict['teams']:
-            for team2 in teams_dict['teams']:
+        teams_arr = all_slots[slot]
+        for team1 in teams_arr:
+            for team2 in teams_arr:
                 if team1 == team2:
                     continue
-                probability = 100 / (distance + 1)
-                print 'probability of %d playing %d = %f' %(team1, team2, probability)
+                print 'Probability of %d playing %d is %f' % (team1['team_id'], team2['team_id'], team1['probability'] * team2['probability'])
