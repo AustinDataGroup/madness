@@ -18,6 +18,7 @@ ______________
 
 * Update the probabilities to look at how the teams have done against each other in the past in regular season
 * Update the probabilities with which team is the strongseed and which is the weakseed.
+
 ______________
 
 #### How do I run the queries?
