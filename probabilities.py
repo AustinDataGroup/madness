@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
-import psycopg2
-import sys
+# date: 03/03/2014
+
 from enum import Enum
+from connection import PostgresConnection
+
+from regular_season import *
+from teams import *
 
 # ENUMERATORS FOR FINDING COLUMNS EASIER
 class SeedEnum(Enum):
@@ -25,22 +29,11 @@ class SeasonEnum(Enum):
     region_y = 5
     region_z = 6
 
-class TeamEnum(Enum):
-    id = 0
-    name = 1
-
 ##### CLASSES FOR TABLES
 class Seasons:
     @staticmethod
     def find_all_seasons(conn):
         return conn.executeCommand('select * from seasons;')
-
-
-class Teams:
-   @staticmethod
-   def find_all_teams(conn):
-        sql = 'select * from teams;' 
-        return conn.executeCommand(sql)
 
 class TournamentSlots:
     @staticmethod
@@ -69,25 +62,6 @@ class TournamentSlots:
         else:
             return []
 
-#this is a basic connection class for connecting to the database.
-class PostgresConnection:
-    def __init__(self, host='localhost', database='madness', user='dbrear'):
-        self.con = psycopg2.connect(host='localhost', database='madness', user='dbrear')
-        self.cur = self.con.cursor()
-
-    def executeCommand(self, command):
-        self.cur.execute(command)
-        res = self.cur.fetchall()
-        return res
-
-    def executeFindOneCommand(self, command):
-        self.cur.execute(command)
-        res = self.cur.fetchone()
-        return res
-
-    def closeConnection(self):
-        if self.con:
-            self.con.close();
 
 if __name__ == '__main__':
     conn = PostgresConnection()
@@ -126,4 +100,6 @@ if __name__ == '__main__':
             for team2 in teams_arr:
                 if team1 == team2:
                     continue
+                team1_prob, team2_prob = RegularSeason.find_probabilities(conn, team1['team_id'], team2['team_id'])
+                print "team1 %f vs team2 %f" % (team1_prob, team2_prob)
                 print 'Probability of %d playing %d is %f' % (team1['team_id'], team2['team_id'], team1['probability'] * team2['probability'])
