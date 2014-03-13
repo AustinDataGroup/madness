@@ -1,12 +1,15 @@
 #! /usr/bin/env python
 
+# author: David Brear
+# date: 2014-03-13
+# version: 1.0
+
 from connection import PostgresConnection
 from regular_season import *
 from teams import *
 import numpy as np
 
 MIN_ID = 501
-
 ITERATION_COUNT = 100
 
 # I know there's a way to do this with python but I couldn't
