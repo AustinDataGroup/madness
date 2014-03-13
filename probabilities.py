@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # date: 03/03/2014
+# version: 0.1.2
 
 from enum import Enum
 from connection import PostgresConnection

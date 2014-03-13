@@ -37,3 +37,7 @@ class RegularSeason:
     def find_loses(conn, team_id):
     	sql = "select winning_team_id, count(winning_team_id) from regular_season_results where losing_team_id = %d group by winning_team_id;" % team_id
     	return conn.executeCommand(sql)
+    @staticmethod
+    def find_loss_count(conn, team_id):
+    	sql = "select count(losing_team_id) from regular_season_results where losing_team_id = %d;" % team_id
+    	return conn.executeFindOneCommand(sql)
