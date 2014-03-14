@@ -34,6 +34,14 @@ class RegularSeason:
             return (0, 0)
         return (float(team1_count) / total), (float(team2_count) / total)
     @staticmethod
+    def find_relevant_loses(conn, team_id):
+    	sql = "select winning_team_id, count(winning_team_id) from regular_season_results where losing_team_id = %d and season >= 'P' group by winning_team_id;" % team_id
+    	return conn.executeCommand(sql)
+    @staticmethod
+    def find_relevant_loss_count(conn, team_id):
+    	sql = "select count(losing_team_id) from regular_season_results where losing_team_id = %d and season >= 'P';" % team_id
+    	return conn.executeFindOneCommand(sql)
+    @staticmethod
     def find_loses(conn, team_id):
     	sql = "select winning_team_id, count(winning_team_id) from regular_season_results where losing_team_id = %d group by winning_team_id;" % team_id
     	return conn.executeCommand(sql)

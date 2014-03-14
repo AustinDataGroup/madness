@@ -8,6 +8,7 @@ from connection import PostgresConnection
 from regular_season import *
 from teams import *
 import numpy as np
+from ranked_teams import RankedTeams as rt
 
 MIN_ID = 501
 ITERATION_COUNT = 100
@@ -36,10 +37,10 @@ if __name__ == '__main__':
     # a loss counts for a vote for the winning team's rank.
     for team in teams:
     	team_id = team[TeamEnum.id]
-    	losses = RegularSeason.find_loses(conn, team_id)
+    	losses = RegularSeason.find_relevant_loses(conn, team_id)
 
         # find the total number of times this team lost this season
-        loss_count = RegularSeason.find_loss_count(conn, team_id)
+        loss_count = RegularSeason.find_relevant_loss_count(conn, team_id)
 
         # for each of their losses add the number of losses to a team
         #  by the total number of losses (their votes for this team by their total
@@ -55,5 +56,9 @@ if __name__ == '__main__':
     ranked_teams = zip(range(MIN_ID, MIN_ID + team_count), rank[0])
 
     ranked_teams.sort(ranked)
-    #print the top 10 ranked teams
-    print ranked_teams[0:10]
+
+    writer = open('ranked_teams.txt', 'w')
+    for ndx, team in enumerate(ranked_teams):
+        writer.write("insert into ranked_teams(id, team_id) values(%d, %d);\n" % (ndx+1, team[0]))
+
+    writer.close()

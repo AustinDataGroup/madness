@@ -7,6 +7,9 @@ class PostgresConnection:
         self.con = psycopg2.connect(host='localhost', database='madness', user='dbrear')
         self.cur = self.con.cursor()
 
+    def execute(self, command):
+        self.cur.execute(command)
+
     def executeCommand(self, command):
         self.cur.execute(command)
         res = self.cur.fetchall()

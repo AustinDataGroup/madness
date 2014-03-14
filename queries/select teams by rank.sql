@@ -1,0 +1,1 @@
+﻿select rt.id as rank, t.name from ranked_teams rt join teams t on rt.team_id = t.id order by rt.id;
